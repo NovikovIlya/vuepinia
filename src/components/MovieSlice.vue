@@ -1,23 +1,30 @@
 <script setup>
 import Button from 'primevue/button'
 import { useMovieStore } from '../stores/MovieStore';
+import { useSearchStore } from '../stores/SearchStore';
 
 const movieStore = useMovieStore()
+const searchStore = useSearchStore()
 const props = defineProps({
   movie: {
     type: Object,
     required: true,
     default: () => {}
+  }, 
+  isSearch:{
+    type:Boolean,
+    required:false,
+    default:false,
   }
 });
 </script>
 
 <template>
   <div class="movie">
-    <img :src="`${movie.poster_path}`" alt="text" class="poster" />
+    <img :src="`${movie.photo === '' ? 'https://myivancrismanalo.files.wordpress.com/2017/10/cropped-unknown_person.png' : movie.photo}`" alt="text" class="poster" />
     <div class="movie__block">
       <div class="movie__block__text">
-        <span class="high">{{ movie.original_title }}</span> ({{ movie.release_date }})
+        <span class="high">{{ movie.name }}</span> ({{ (movie.age) }})
       </div>
       <div class="text">
         {{ movie.overview }}
@@ -27,11 +34,12 @@ const props = defineProps({
      
     </div>
     <div class="movie__buttons">
-      <Button  size="small">Delete</Button>
-      <Button  size="small"  class="movie__buttons__watched" @click="movieStore.toggleWatched(movie.id)">
+      <Button @click="movieStore.deleteMovie(movie.id)"  size="small" v-if="isSearch===false">Delete</Button>
+      <Button @click="searchStore.addToFavoriteActor(movie)"  size="small" v-else>Add</Button>
+      <!-- <Button  size="small"  class="movie__buttons__watched" @click="movieStore.toggleWatched(movie.id)">
         <span v-if="!movie.isWatched">Watched</span>
         <span v-else>Unwatched</span>
-      </Button>
+      </Button> -->
     </div>
   </div>
 </template>

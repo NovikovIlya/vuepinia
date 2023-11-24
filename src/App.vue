@@ -1,9 +1,14 @@
 <script setup>
-import { useMovieStore } from './stores/MovieStore'
-import MovieSlice from './components/MovieSlice.vue'
+import MovieSlice from './components/MovieSlice.vue';
+import SearchSlice from './components/SearchSlice.vue';
 import Button from 'primevue/button'
+import { useMovieStore } from './stores/MovieStore'
+
 
 const movieStore = useMovieStore();
+console.log('1',movieStore.totalCountMovies)
+console.log('2',movieStore.totalCountMovies1)
+
 </script>
 
 <template>
@@ -22,14 +27,12 @@ const movieStore = useMovieStore();
         :class="[`btn`, { btnGreen: movieStore.activeTabs === 1 }]"
         @click="movieStore.setActiveTab(1)"
         size="small"
-      
       />
       <Button
         label="Search"
         :class="[`btn`, { btnGreen: movieStore.activeTabs === 2 }]"
         @click="movieStore.setActiveTab(2)"
         size="small"
-     
       />
     </div>
     <div class="movies" v-if="movieStore.activeTabs === 1">
@@ -39,7 +42,9 @@ const movieStore = useMovieStore();
       <h3>All movies {{ movieStore.totalCountMovies}}</h3>
       <MovieSlice v-for="movie of movieStore.movies" :key="movie.id" :movie="movie" />
     </div>
-    <div v-else class="search">Search</div>
+    <div v-else class="search">
+      <SearchSlice/>
+    </div>
   </div>
 </template>
 
@@ -79,6 +84,7 @@ const movieStore = useMovieStore();
   width: 100%;
 }
 .search{
+  margin-bottom: 20px;
   width: 100%;
 }
 </style>

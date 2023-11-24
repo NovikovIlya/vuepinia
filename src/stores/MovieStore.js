@@ -1,46 +1,44 @@
 import { defineStore } from 'pinia'
+import { ref, computed } from 'vue'
 
-export const useMovieStore = defineStore('movieStore', {
-  state: () => ({
-    movies: [
-      {
-        id: 1,
-        original_title: 'Spider',
-        overview:
-          'Waits for a specific time before continuing replay with the next command (timed delay).',
-        poster_path:
-          'https://assets-global.website-files.com/6009ec8cda7f305645c9d91b/6408f76710a9935109f855d4_smile-min.png',
-        release_date: '2002-05-01',
-        isWatched: false
-      },
-      {
-        id: 2,
-        original_title: 'Batman',
-        overview: 'before being',
-        poster_path:
-          'https://assets-global.website-files.com/6009ec8cda7f305645c9d91b/6408f76710a9935109f855d4_smile-min.png',
-        release_date: '2001-05-01',
-        isWatched: true
-      }
-    ],
-    activeTabs: 1
-  }),
-  //Получить что-то
-  getters: {
-    watchedMovies() {
-      return this.movies.filter((el) => el.isWatched)
-    },
-    totalCountMovies() {
-      return this.movies.length
-    }
-  },
-  actions: {
-    setActiveTab(id) {
-      this.activeTabs = id
-    },
-  toggleWatched(id){
-    const idx = this.movies.findIndex(el=>el.id===id);
-    this.movies[idx].isWatched = !this.movies[idx].isWatched
+export const useMovieStore = defineStore('movieStore', () => {
+  const movies = ref([])
+  const activeTabs = ref(1)
+  const movieOnLocalStorage = localStorage.getItem('movies')
+
+  const setActiveTab = (id) => {
+    activeTabs.value = id
+  }  
+
+  const toggleWatched = (id) => {
+    const idx = movies.value.findIndex((el) => el.id === id)
+    movies.value[idx].isWatched = !movies.value[idx].isWatched
   }
+
+  const deleteMovie = (id) => {
+    movies.value = movies.value.filter((item) => item.id !== id)
+  }
+
+  const watchedMovies = computed(() => {
+    return movies.value.filter((el) => el.isWatched)
+  })
+
+  const totalCountMovies1 = () => {
+    return movies.value.length
+  }
+
+  const totalCountMovies = computed(() => {
+    return movies.value.length
+  })
+
+  return {
+    activeTabs,
+    deleteMovie,
+    movies,
+    setActiveTab,
+    toggleWatched,
+    watchedMovies,
+    totalCountMovies,
+    totalCountMovies1
   }
 })

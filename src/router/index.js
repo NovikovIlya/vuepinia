@@ -1,14 +1,21 @@
 import { createRouter, createWebHistory } from 'vue-router'
 
 import App from '../App.vue'
+import DirectSlice from '../components/DirectSlice.vue'
+import PersonSlice from '../components/PersonSlice.vue'
 
 const router = createRouter({
-  history: createWebHistory(import.meta.env.BASE_URL),
+  history: createWebHistory(),
   routes: [
     {
       path: '/',
       name: 'home',
-      component: App
+      component: DirectSlice
+    },
+    {
+      path: '/person/:id',
+      name: 'person',
+      component: PersonSlice
     },
    
   ]

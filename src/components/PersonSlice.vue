@@ -1,6 +1,10 @@
 <script setup>
 import { useQuery } from '@tanstack/vue-query'
 import { onMounted, ref } from 'vue'
+import { useRoute } from 'vue-router';
+
+const route = useRoute()
+console.log(route.params.id);
 
 const getTodos = async (limit) =>
   await fetch(`https://jsonplaceholder.typicode.com/posts${limit.value}`).then((response) =>
